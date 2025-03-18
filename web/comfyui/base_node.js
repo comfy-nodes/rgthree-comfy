@@ -194,7 +194,7 @@ export class RgthreeBaseServerNode extends RgthreeBaseNode {
         return ComfyWidgets;
     }
     async setupFromServerNodeData() {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         const nodeData = this.constructor.nodeData;
         if (!nodeData) {
             throw Error("No node data");
@@ -254,8 +254,8 @@ export class RgthreeBaseServerNode extends RgthreeBaseNode {
             this.addOutput(outputName, output, { shape: outputShape });
         }
         const s = this.computeSize();
-        s[0] = Math.max(config.minWidth, s[0] * 1.5);
-        s[1] = Math.max(config.minHeight, s[1]);
+        s[0] = Math.max((_d = config.minWidth) !== null && _d !== void 0 ? _d : 1, s[0] * 1.5);
+        s[1] = Math.max((_e = config.minHeight) !== null && _e !== void 0 ? _e : 1, s[1]);
         this.size = s;
         this.serialize_widgets = true;
     }

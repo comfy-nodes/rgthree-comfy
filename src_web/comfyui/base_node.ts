@@ -396,8 +396,12 @@ export class RgthreeBaseServerNode extends RgthreeBaseNode {
     }
 
     const s = this.computeSize();
-    s[0] = Math.max(config.minWidth, s[0] * 1.5);
-    s[1] = Math.max(config.minHeight, s[1]);
+    // Sometime around v1.12.6 this broke as `minWidth` and `minHeight` were being explicitly set
+    // to `undefined` in the above Object.assign call (specifically for `WIDGETS[INT]`. We can avoid
+    // that by ensureing we're at a number in that case.
+    // See https://github.com/Comfy-Org/ComfyUI_frontend/issues/3045
+    s[0] = Math.max(config.minWidth ?? 1, s[0] * 1.5);
+    s[1] = Math.max(config.minHeight ?? 1, s[1]);
     this.size = s;
     this.serialize_widgets = true;
   }
