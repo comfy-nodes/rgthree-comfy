@@ -149,9 +149,8 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
                     },
                 },
             ];
-            let canvas = app.canvas;
-            new LiteGraph.ContextMenu(menuItems, { title: "LORA WIDGET", event: rgthree.lastAdjustedMouseEvent }, canvas.getCanvasWindow());
-            return null;
+            new LiteGraph.ContextMenu(menuItems, { title: "LORA WIDGET", event: rgthree.lastCanvasMouseEvent });
+            return undefined;
         }
         return this.defaultGetSlotMenuOptions(slot);
     }
@@ -179,11 +178,11 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
         return allOn && ((_d = this.widgets) === null || _d === void 0 ? void 0 : _d.length) ? true : false;
     }
     toggleAllLoras() {
-        var _b;
+        var _b, _c;
         const allOn = this.allLorasState();
         const toggledTo = !allOn ? true : false;
         for (const widget of this.widgets) {
-            if ((_b = widget.name) === null || _b === void 0 ? void 0 : _b.startsWith("lora_")) {
+            if (((_b = widget.name) === null || _b === void 0 ? void 0 : _b.startsWith("lora_")) && ((_c = widget.value) === null || _c === void 0 ? void 0 : _c.on) != null) {
                 widget.value.on = toggledTo;
             }
         }
@@ -243,11 +242,12 @@ RgthreePowerLoraStacker[_a] = {
 class PowerLoraStackerHeaderWidget extends RgthreeBaseWidget {
     constructor(name = "PowerLoraStackerHeaderWidget") {
         super(name);
-        this.showModelAndClip = null;
         this.value = { type: "PowerLoraStackerHeaderWidget" };
+        this.type = 'custom';
         this.hitAreas = {
             toggle: { bounds: [0, 0], onDown: this.onToggleDown },
         };
+        this.showModelAndClip = null;
     }
     draw(ctx, node, w, posY, height) {
         if (!node.hasLoraWidgets()) {
@@ -296,6 +296,7 @@ const DEFAULT_LORA_WIDGET_DATA = {
 class PowerLoraStackerWidget extends RgthreeBaseWidget {
     constructor(name) {
         super(name);
+        this.type = 'custom';
         this.haveMouseMovedStrength = false;
         this.loraInfoPromise = null;
         this.loraInfo = null;
@@ -374,8 +375,8 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget {
         ctx.fillStyle = LiteGraph.WIDGET_TEXT_COLOR;
         let rposX = node.size[0] - margin - innerMargin - innerMargin;
         const strengthValue = this.showModelAndClip
-            ? (_c = this.value.strengthTwo) !== null && _c !== void 0 ? _c : 1
-            : (_d = this.value.strength) !== null && _d !== void 0 ? _d : 1;
+            ? ((_c = this.value.strengthTwo) !== null && _c !== void 0 ? _c : 1)
+            : ((_d = this.value.strength) !== null && _d !== void 0 ? _d : 1);
         let textColor = undefined;
         if (((_e = this.loraInfo) === null || _e === void 0 ? void 0 : _e.strengthMax) != null && strengthValue > ((_f = this.loraInfo) === null || _f === void 0 ? void 0 : _f.strengthMax)) {
             textColor = "#c66";
@@ -445,7 +446,7 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget {
         ctx.globalAlpha = app.canvas.editor_alpha;
         ctx.restore();
     }
-    serializeValue(serializedNode, widgetIndex) {
+    serializeValue(node, index) {
         var _b;
         const v = { ...this.value };
         if (!this.showModelAndClip) {
