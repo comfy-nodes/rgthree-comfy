@@ -1,6 +1,6 @@
 .rgthree-info-dialog {
   width: 90vw;
-  max-width: 960px;
+  max-width: 1440px;
 }
 .rgthree-info-dialog .rgthree-info-area {
   list-style: none;
@@ -242,10 +242,12 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  scroll-snap-type: x mandatory;
+  /* scroll-snap-type: x mandatory; */
   display: flex;
   flex-direction: row;
   overflow: auto;
+  height: 70vh;
+  max-height: 960px;
 }
 .rgthree-info-dialog .rgthree-info-images > li {
   scroll-snap-align: start;
@@ -264,6 +266,12 @@
 .rgthree-info-dialog .rgthree-info-images > li figure {
   margin: 0;
   position: static;
+  width: 100%;
+  height: 100%;
+}
+.rgthree-info-dialog .rgthree-info-images > li figure img {
+  width: auto;
+  height: 100%;
 }
 .rgthree-info-dialog .rgthree-info-images > li figure video, .rgthree-info-dialog .rgthree-info-images > li figure img {
   max-height: 45vh;
