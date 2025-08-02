@@ -4,7 +4,7 @@ import type {
   Vector2,
   IContextMenuValue,
   IFoundSlot,
-  LGraphNodeConstructor
+  LGraphNodeConstructor,
 } from "@comfyorg/litegraph";
 import type {CanvasMouseEvent} from "@comfyorg/litegraph/dist/types/events.js";
 import type {ISerialisedNode} from "@comfyorg/litegraph/dist/types/serialisation.js";
@@ -144,7 +144,8 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
       new RgthreeBetterButtonWidget(
         "➕ Add Lora",
         (event: CanvasMouseEvent, pos: Vector2, node: TLGraphNode) => {
-          rgthreeApi.getLoras().then((loras) => {
+          rgthreeApi.getLoras().then((lorasDetails) => {
+            const loras = lorasDetails.map((l) => l.file);
             showLoraChooser(
               event as MouseEvent,
               (value: IContextMenuValue | string) => {
@@ -227,7 +228,7 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
       const index = this.widgets.indexOf(widget);
       const canMoveUp = !!this.widgets[index - 1]?.name?.startsWith("lora_");
       const canMoveDown = !!this.widgets[index + 1]?.name?.startsWith("lora_");
-      const menuItems: (IContextMenuValue|null)[] = [
+      const menuItems: (IContextMenuValue | null)[] = [
         {
           content: `ℹ️ Show Info`,
           callback: () => {
@@ -262,10 +263,10 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
           },
         },
       ];
-      new LiteGraph.ContextMenu(
-        menuItems,
-        {title: "LORA WIDGET", event: rgthree.lastCanvasMouseEvent!}
-      );
+      new LiteGraph.ContextMenu(menuItems, {
+        title: "LORA WIDGET",
+        event: rgthree.lastCanvasMouseEvent!,
+      });
 
       // [🤮] ComfyUI doesn't have a possible return type as falsy, even though the impl skips the
       // menu when the return is falsy. Casting as any.
@@ -374,7 +375,7 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
  */
 class PowerLoraStackerHeaderWidget extends RgthreeBaseWidget<{type: string}> {
   override value = {type: "PowerLoraStackerHeaderWidget"};
-  override readonly type = 'custom';
+  override readonly type = "custom";
 
   protected override hitAreas: RgthreeBaseHitAreas<"toggle"> = {
     toggle: {bounds: [0, 0] as Vector2, onDown: this.onToggleDown},
@@ -464,7 +465,7 @@ type PowerLoraStackerWidgetValue = {
  * The PowerStackerWidget that combines several custom drawing and functionality in a single row.
  */
 class PowerLoraStackerWidget extends RgthreeBaseWidget<PowerLoraStackerWidgetValue> {
-  override readonly type = 'custom';
+  override readonly type = "custom";
 
   /** Whether the strength has changed with mouse move (to cancel mouse up). */
   private haveMouseMovedStrength = false;
@@ -487,17 +488,17 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget<PowerLoraStackerWidgetVal
     | "strengthTwoAny"
   > = {
     toggle: {bounds: [0, 0] as Vector2, onDown: this.onToggleDown},
-    lora: {bounds: [0, 0] as Vector2, onDown: this.onLoraDown},
+    lora: {bounds: [0, 0] as Vector2, onClick: this.onLoraClick},
     // info: { bounds: [0, 0] as Vector2, onDown: this.onInfoDown },
 
-    strengthDec: {bounds: [0, 0] as Vector2, onDown: this.onStrengthDecDown},
-    strengthVal: {bounds: [0, 0] as Vector2, onUp: this.onStrengthValUp},
-    strengthInc: {bounds: [0, 0] as Vector2, onDown: this.onStrengthIncDown},
+    strengthDec: {bounds: [0, 0] as Vector2, onClick: this.onStrengthDecDown},
+    strengthVal: {bounds: [0, 0] as Vector2, onClick: this.onStrengthValUp},
+    strengthInc: {bounds: [0, 0] as Vector2, onClick: this.onStrengthIncDown},
     strengthAny: {bounds: [0, 0] as Vector2, onMove: this.onStrengthAnyMove},
 
-    strengthTwoDec: {bounds: [0, 0] as Vector2, onDown: this.onStrengthTwoDecDown},
-    strengthTwoVal: {bounds: [0, 0] as Vector2, onUp: this.onStrengthTwoValUp},
-    strengthTwoInc: {bounds: [0, 0] as Vector2, onDown: this.onStrengthTwoIncDown},
+    strengthTwoDec: {bounds: [0, 0] as Vector2, onClick: this.onStrengthTwoDecDown},
+    strengthTwoVal: {bounds: [0, 0] as Vector2, onClick: this.onStrengthTwoValUp},
+    strengthTwoInc: {bounds: [0, 0] as Vector2, onClick: this.onStrengthTwoIncDown},
     strengthTwoAny: {bounds: [0, 0] as Vector2, onMove: this.onStrengthTwoAnyMove},
   };
 
@@ -566,7 +567,7 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget<PowerLoraStackerWidgetVal
     let posX = margin;
 
     // Draw the background.
-    drawRoundedRectangle(ctx, {posX, posY, height, width: node.size[0] - margin * 2});
+    drawRoundedRectangle(ctx, {pos: [posX, posY], size: [node.size[0] - margin * 2, height]});
 
     // Draw the toggle
     this.hitAreas.toggle.bounds = drawTogglePart(ctx, {posX, posY, height, value: this.value.on});
@@ -677,7 +678,10 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget<PowerLoraStackerWidgetVal
     ctx.restore();
   }
 
-  override serializeValue(node: TLGraphNode, index: number): PowerLoraStackerWidgetValue | Promise<PowerLoraStackerWidgetValue> {
+  override serializeValue(
+    node: TLGraphNode,
+    index: number,
+  ): PowerLoraStackerWidgetValue | Promise<PowerLoraStackerWidgetValue> {
     const v = {...this.value};
     // Never send the second value to the backend if we're not showing it, otherwise, let's just
     // make sure it's not null.
@@ -700,7 +704,7 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget<PowerLoraStackerWidgetVal
     this.showLoraInfoDialog();
   }
 
-  onLoraDown(event: CanvasMouseEvent, pos: Vector2, node: TLGraphNode) {
+  onLoraClick(event: CanvasMouseEvent, pos: Vector2, node: TLGraphNode) {
     showLoraChooser(event, (value: IContextMenuValue) => {
       if (typeof value === "string") {
         this.value.lora = value;
