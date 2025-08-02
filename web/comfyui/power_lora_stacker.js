@@ -68,7 +68,8 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
         moveArrayItem(this.widgets, this.addCustomWidget(new PowerLoraStackerHeaderWidget()), 1);
         this.widgetButtonSpacer = this.addCustomWidget(new RgthreeDividerWidget({ marginTop: 4, marginBottom: 0, thickness: 0 }));
         this.addCustomWidget(new RgthreeBetterButtonWidget("➕ Add Lora", (event, pos, node) => {
-            rgthreeApi.getLoras().then((loras) => {
+            rgthreeApi.getLoras().then((lorasDetails) => {
+                const loras = lorasDetails.map((l) => l.file);
                 showLoraChooser(event, (value) => {
                     var _b;
                     if (typeof value === "string") {
@@ -149,7 +150,10 @@ class RgthreePowerLoraStacker extends RgthreeBaseServerNode {
                     },
                 },
             ];
-            new LiteGraph.ContextMenu(menuItems, { title: "LORA WIDGET", event: rgthree.lastCanvasMouseEvent });
+            new LiteGraph.ContextMenu(menuItems, {
+                title: "LORA WIDGET",
+                event: rgthree.lastCanvasMouseEvent,
+            });
             return undefined;
         }
         return this.defaultGetSlotMenuOptions(slot);
@@ -243,7 +247,7 @@ class PowerLoraStackerHeaderWidget extends RgthreeBaseWidget {
     constructor(name = "PowerLoraStackerHeaderWidget") {
         super(name);
         this.value = { type: "PowerLoraStackerHeaderWidget" };
-        this.type = 'custom';
+        this.type = "custom";
         this.hitAreas = {
             toggle: { bounds: [0, 0], onDown: this.onToggleDown },
         };
@@ -296,21 +300,21 @@ const DEFAULT_LORA_WIDGET_DATA = {
 class PowerLoraStackerWidget extends RgthreeBaseWidget {
     constructor(name) {
         super(name);
-        this.type = 'custom';
+        this.type = "custom";
         this.haveMouseMovedStrength = false;
         this.loraInfoPromise = null;
         this.loraInfo = null;
         this.showModelAndClip = null;
         this.hitAreas = {
             toggle: { bounds: [0, 0], onDown: this.onToggleDown },
-            lora: { bounds: [0, 0], onDown: this.onLoraDown },
-            strengthDec: { bounds: [0, 0], onDown: this.onStrengthDecDown },
-            strengthVal: { bounds: [0, 0], onUp: this.onStrengthValUp },
-            strengthInc: { bounds: [0, 0], onDown: this.onStrengthIncDown },
+            lora: { bounds: [0, 0], onClick: this.onLoraClick },
+            strengthDec: { bounds: [0, 0], onClick: this.onStrengthDecDown },
+            strengthVal: { bounds: [0, 0], onClick: this.onStrengthValUp },
+            strengthInc: { bounds: [0, 0], onClick: this.onStrengthIncDown },
             strengthAny: { bounds: [0, 0], onMove: this.onStrengthAnyMove },
-            strengthTwoDec: { bounds: [0, 0], onDown: this.onStrengthTwoDecDown },
-            strengthTwoVal: { bounds: [0, 0], onUp: this.onStrengthTwoValUp },
-            strengthTwoInc: { bounds: [0, 0], onDown: this.onStrengthTwoIncDown },
+            strengthTwoDec: { bounds: [0, 0], onClick: this.onStrengthTwoDecDown },
+            strengthTwoVal: { bounds: [0, 0], onClick: this.onStrengthTwoValUp },
+            strengthTwoInc: { bounds: [0, 0], onClick: this.onStrengthTwoIncDown },
             strengthTwoAny: { bounds: [0, 0], onMove: this.onStrengthTwoAnyMove },
         };
         this._value = {
@@ -362,7 +366,7 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget {
         const lowQuality = isLowQuality();
         const midY = posY + height * 0.5;
         let posX = margin;
-        drawRoundedRectangle(ctx, { posX, posY, height, width: node.size[0] - margin * 2 });
+        drawRoundedRectangle(ctx, { pos: [posX, posY], size: [node.size[0] - margin * 2, height] });
         this.hitAreas.toggle.bounds = drawTogglePart(ctx, { posX, posY, height, value: this.value.on });
         posX += this.hitAreas.toggle.bounds[1] + innerMargin;
         if (lowQuality) {
@@ -466,7 +470,7 @@ class PowerLoraStackerWidget extends RgthreeBaseWidget {
     onInfoDown(event, pos, node) {
         this.showLoraInfoDialog();
     }
-    onLoraDown(event, pos, node) {
+    onLoraClick(event, pos, node) {
         showLoraChooser(event, (value) => {
             if (typeof value === "string") {
                 this.value.lora = value;
