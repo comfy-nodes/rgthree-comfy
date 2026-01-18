@@ -69,8 +69,9 @@ export class Bookmark extends RgthreeBaseVirtualNode {
     this.addWidget("number", "zoom", 1, (value: number) => {}, {
       y: 8 + LiteGraph.NODE_WIDGET_HEIGHT + 4,
       max: 2,
-      min: 0.5,
+      min: 0.2,
       precision: 2,
+      step: 0.5,
     });
     this.keypressBound = this.onKeypress.bind(this);
     this.title = "🔖";
