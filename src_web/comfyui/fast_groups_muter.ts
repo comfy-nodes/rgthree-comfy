@@ -194,7 +194,7 @@ export abstract class BaseFastGroupsModeChanger extends RgthreeBaseVirtualNode {
         continue;
       }
       let isDirty = false;
-      const widgetLabel = `Enable ${group.title}`;
+      const widgetLabel = `${group.title}`;
       let widget = this.widgets.find((w) => w.label === widgetLabel) as FastGroupsToggleRowWidget;
       if (!widget) {
         // When we add a widget, litegraph is going to mess up the size, so we

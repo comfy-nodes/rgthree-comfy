@@ -131,7 +131,7 @@ export class BaseFastGroupsModeChanger extends RgthreeBaseVirtualNode {
                 continue;
             }
             let isDirty = false;
-            const widgetLabel = `Enable ${group.title}`;
+            const widgetLabel = `${group.title}`;
             let widget = this.widgets.find((w) => w.label === widgetLabel);
             if (!widget) {
                 this.tempSize = [...this.size];
