@@ -1,5 +1,5 @@
 import { app } from "../../scripts/app.js";
-import { iconGear, iconStarFilled, logoRgthreeAsync } from "../../rgthree/common/media/svgs.js";
+import { iconGear, logoRgthreeAsync } from "../../rgthree/common/media/svgs.js";
 import { $el, empty } from "../../rgthree/common/utils_dom.js";
 import { SERVICE as BOOKMARKS_SERVICE } from "./services/bookmarks_services.js";
 import { SERVICE as CONFIG_SERVICE } from "./services/config_service.js";
@@ -36,12 +36,6 @@ function addRgthreeTopBarButtons() {
                 child: $el("button.rgthree-button-reset", {
                     html: iconGear + "Settings (rgthree-comfy)",
                     onclick: () => new RgthreeConfigDialog().show(),
-                }),
-            }),
-            $el("li", {
-                child: $el("button.rgthree-button-reset", {
-                    html: iconStarFilled + "Star on Github",
-                    onclick: () => window.open("https://github.com/rgthree/rgthree-comfy", "_blank"),
                 }),
             }),
         ],
