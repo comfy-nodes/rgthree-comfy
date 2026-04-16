@@ -29,7 +29,6 @@ import {
   iconGear,
   iconNode,
   iconReplace,
-  iconStarFilled,
   logoRgthree,
 } from "rgthree/common/media/svgs.js";
 import {createElement, queryAll, query} from "rgthree/common/utils_dom.js";
@@ -641,18 +640,6 @@ class Rgthree extends EventTarget {
         },
       },
       ...bookmarkMenuItems,
-      {
-        content: "More...",
-        disabled: true,
-        className: "rgthree-contextmenu-item rgthree-contextmenu-label",
-      },
-      {
-        content: iconStarFilled + "Star on Github",
-        className: "rgthree-contextmenu-item rgthree-contextmenu-github",
-        callback: (...args: any[]) => {
-          window.open("https://github.com/rgthree/rgthree-comfy", "_blank");
-        },
-      },
     ];
   }
 

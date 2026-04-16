@@ -634,9 +634,7 @@ body.rgthree-modal-menu-open > *:not(.rgthree-menu):not(.rgthree-top-messages-co
   margin: 0;
   padding: 2px;
   cursor: default;
-  opacity: 1;
   padding: 4px;
-  font-weight: bold;
 }
 
 .litegraph.litecontextmenu .litemenu-title .rgthree-contextmenu-title-rgthree-comfy {
