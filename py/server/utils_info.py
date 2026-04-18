@@ -281,7 +281,7 @@ def _merge_civitai_data(info_data: dict, data_civitai: dict) -> bool:
 
   if 'modelId' in data_civitai:
     info_data['links'] = info_data['links'] if 'links' in info_data else []
-    civitai_link = f'https://civitai.com/models/{get_dict_value(data_civitai, "modelId")}'
+    civitai_link = f'https://civitai.red/models/{get_dict_value(data_civitai, "modelId")}'
     if get_dict_value(data_civitai, "id"):
       civitai_link += f'?modelVersionId={get_dict_value(data_civitai, "id")}'
     info_data['links'].append(civitai_link)
@@ -299,7 +299,7 @@ def _merge_civitai_data(info_data: dict, data_civitai: dict) -> bool:
         img_id = os.path.splitext(os.path.basename(img_url))[0] if img_url is not None else None
         img_data = {
           'url': img_url,
-          'civitaiUrl': f'https://civitai.com/images/{img_id}' if img_id is not None else None,
+          'civitaiUrl': f'https://civitai.red/images/{img_id}' if img_id is not None else None,
           'width': get_dict_value(img, 'width'),
           'height': get_dict_value(img, 'height'),
           'type': get_dict_value(img, 'type'),
@@ -332,7 +332,7 @@ def _get_model_civitai_data(file: str, model_type, default=None, refresh=False):
 
   json_file_path = _get_info_cache_file(file_hash, 'civitai')
 
-  api_url = f'https://civitai.com/api/v1/model-versions/by-hash/{file_hash}'
+  api_url = f'https://civitai.red/api/v1/model-versions/by-hash/{file_hash}'
   file_data = read_userdata_json(json_file_path)
   if file_data is None or refresh is True:
     try:

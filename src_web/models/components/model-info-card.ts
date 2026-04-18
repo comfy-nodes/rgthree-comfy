@@ -20,7 +20,7 @@ export class RgthreeModelInfoCard extends RgthreeCustomElement {
   }
 
   getCivitaiLink(links: string[] | undefined) {
-    return links?.find((i) => i.includes("civitai.com/models")) || null;
+    return links?.find((i) => i.includes("civitai.red/models")) || null;
   }
 
   setModelData(data: RgthreeModelInfo) {

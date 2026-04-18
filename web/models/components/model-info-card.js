@@ -9,7 +9,7 @@ export class RgthreeModelInfoCard extends RgthreeCustomElement {
         return String(`${date.toLocaleDateString()} ${date.toLocaleTimeString()}`);
     }
     getCivitaiLink(links) {
-        return (links === null || links === void 0 ? void 0 : links.find((i) => i.includes("civitai.com/models"))) || null;
+        return (links === null || links === void 0 ? void 0 : links.find((i) => i.includes("civitai.red/models"))) || null;
     }
     setModelData(data) {
         this.data = data;

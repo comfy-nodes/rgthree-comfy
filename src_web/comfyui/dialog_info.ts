@@ -146,7 +146,7 @@ abstract class RgthreeInfoDialog extends RgthreeDialog {
 
   private getInfoContent() {
     const info = this.modelInfo || {};
-    const civitaiLink = info.links?.find((i) => i.includes("civitai.com/models"));
+    const civitaiLink = info.links?.find((i) => i.includes("civitai.red/models"));
     const html = `
       <ul class="rgthree-info-area">
         <li title="Type" class="rgthree-info-tag -type -type-${(
