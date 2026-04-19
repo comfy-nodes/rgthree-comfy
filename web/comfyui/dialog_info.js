@@ -167,7 +167,7 @@ class RgthreeInfoDialog extends RgthreeDialog {
       <ul class="rgthree-info-images">${(_y = (_x = info.images) === null || _x === void 0 ? void 0 : _x.map((img) => `
         <li>
           <figure>${img.type === 'video'
-            ? `<video src="${img.url}" autoplay loop></video>`
+            ? `<video src="${img.url}" autoplay controls disablepictureinpicture loop muted></video>`
             : `<img src="${img.url}" />`}
             <figcaption><!--
               -->${imgInfoField("", img.civitaiUrl
