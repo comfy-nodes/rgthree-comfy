@@ -59,10 +59,10 @@ export class BaseNodeModeChanger extends BaseAnyInputConnectedNode {
   private setWidget(widget: IWidget, linkedNode: LGraphNode, forceValue?: boolean) {
     let changed = false;
     const value = forceValue == null ? linkedNode.mode === this.modeOn : forceValue;
-    let name = `Enable ${linkedNode.title}`;
+    let name = `${linkedNode.title}`;
     // Need to set initally
     if (widget.name !== name) {
-      widget.name = `Enable ${linkedNode.title}`;
+      widget.name = `${linkedNode.title}`;
       widget.options = {on: "yes", off: "no"};
       widget.value = value;
       (widget as any).doModeChange = (forceValue?: boolean, skipOtherNodeCheck?: boolean) => {

@@ -41,9 +41,9 @@ export class BaseNodeModeChanger extends BaseAnyInputConnectedNode {
     setWidget(widget, linkedNode, forceValue) {
         let changed = false;
         const value = forceValue == null ? linkedNode.mode === this.modeOn : forceValue;
-        let name = `Enable ${linkedNode.title}`;
+        let name = `${linkedNode.title}`;
         if (widget.name !== name) {
-            widget.name = `Enable ${linkedNode.title}`;
+            widget.name = `${linkedNode.title}`;
             widget.options = { on: "yes", off: "no" };
             widget.value = value;
             widget.doModeChange = (forceValue, skipOtherNodeCheck) => {
